@@ -1,7 +1,16 @@
 package com.example.honestsign;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.context.annotation.Description;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class CrptApi {
     private Semaphore semaphore;
+    private int requestsLimit;
+    private long interval;
 
     public CrptApi(int requestsLimit, long interval) {
         this.requestsLimit = requestsLimit;
@@ -66,9 +77,9 @@ public class CrptApi {
                 @Override
                 public void run() {
                     Description description = new Description("Document description");
-                    Product product1 = new Product("certificate 1", "2024-05-28", "AA111", "owner1", "producer1", "2024-05-25", "tnved1", "uit1", "uitu1");
-                    Product product2 = new Product("certificate 1", "2023-04-29", "BB222", "owner2", "producer2", "2023-04-24", "tnved2", "uit2", "uitu2");
-                    List<Product> products = new ArrayList<>();
+                    Document.Product product1 = new Document.Product("certificate 1", "2024-05-28", "AA111", "owner1", "producer1", "2024-05-25", "tnved1", "uit1", "uitu1");
+                    Document.Product product2 = new Document.Product("certificate 1", "2023-04-29", "BB222", "owner2", "producer2", "2023-04-24", "tnved2", "uit2", "uitu2");
+                    List<Document.Product> products = new ArrayList<>();
                     products.add(product1);
                     products.add(product2);
                     Document document = new Document(description, "1", "approved", "type1", true, "owner_inn", "participant_inn", "producer_inn", "2024-07-04", "type2", products, "2024-07-04", "reg123");
@@ -134,4 +145,4 @@ class Document {
             this.uit_code = uit_code;
             this.uitu_code = uitu_code;
         }
-}
+}}
