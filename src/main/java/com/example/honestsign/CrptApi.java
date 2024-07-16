@@ -30,7 +30,6 @@ public class CrptApi {
     public void createDocument(Object document, String signature) {
         try {
             semaphore.acquire();
-
             // Преобразование документа и создание запроса
 
             try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
