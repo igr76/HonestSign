@@ -2,12 +2,12 @@ package com.example.honestsign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.context.annotation.Description;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CrptApi {
+    private final String apiUrl = "https://ismp.crpt.ru/api/v3/lk/documents/create";
     private Semaphore semaphore;
     private int requestsLimit;
     private long interval;
@@ -76,9 +77,9 @@ public class CrptApi {
                 @Override
                 public void run() {
                     Description description = new Description("Document description");
-                    Document.Product product1 = new Document.Product("certificate 1", "2024-05-28", "AA111", "owner1", "producer1", "2024-05-25", "tnved1", "uit1", "uitu1");
-                    Document.Product product2 = new Document.Product("certificate 1", "2023-04-29", "BB222", "owner2", "producer2", "2023-04-24", "tnved2", "uit2", "uitu2");
-                    List<Document.Product> products = new ArrayList<>();
+                    Product product1 = new Product("certificate 1", "2024-05-28", "AA111", "owner1", "producer1", "2024-05-25", "tnved1", "uit1", "uitu1");
+                    Product product2 = new Product("certificate 1", "2023-04-29", "BB222", "owner2", "producer2", "2023-04-24", "tnved2", "uit2", "uitu2");
+                    List<Product> products = new ArrayList<>();
                     products.add(product1);
                     products.add(product2);
                     Document document = new Document(description, "1", "approved", "type1", true, "owner_inn", "participant_inn", "producer_inn", "2024-07-04", "type2", products, "2024-07-04", "reg123");
@@ -90,7 +91,8 @@ public class CrptApi {
         }
     }
 }
-
+@Getter
+@Setter
 class Document {
 
     private Description description;
@@ -122,6 +124,19 @@ class Document {
         this.reg_date = reg_date;
         this.reg_number = reg_number;
     }
+}
+@Getter
+@Setter
+class Description {
+    private String participantInn;
+
+    public Description(String participantInn) {
+        this.participantInn = participantInn;
+    }
+
+}
+@Getter
+@Setter
     class Product {
         private String certificate_document;
         private String certificate_document_date;
@@ -144,4 +159,5 @@ class Document {
             this.uit_code = uit_code;
             this.uitu_code = uitu_code;
         }
-}}
+    }
+
